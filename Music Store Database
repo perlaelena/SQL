@@ -1,0 +1,26 @@
+--Create a music store database.
+
+CREATE TABLE music_store (id INTEGER PRIMARY KEY, item TEXT, quantity INTEGER, model TEXT, price INTEGER);
+INSERT INTO music_store VALUES (1, "violin", 50, "Eastman", 1000);
+INSERT INTO music_store VALUES (2, "cello", 30, "Cecilio", 300);
+INSERT INTO music_store VALUES (3, "bass", 5, "Robertson", 5000);
+INSERT INTO music_store VALUES (4, "viola", 16, "Eastman", 1200);
+INSERT INTO music_store VALUES (5, "piano", 10, "Steinway", 30000);
+INSERT INTO music_store VALUES (6, "ukelele", 12, "Rocco", 200);
+INSERT INTO music_store VALUES (7, "guitar", 20, "Fender", 600);
+INSERT INTO music_store VALUES (8, "bass guitar", 5, "Fender", 700);
+INSERT INTO music_store VALUES (9, "clarinet", 10, "Bach", 800);
+INSERT INTO music_store VALUES (10, "saxophone", 15, "Gerty", 1300);
+INSERT INTO music_store VALUES (11, "trombone", 5, "Graham", 900);
+INSERT INTO music_store VALUES (12, "tuba", 4, "Bertha", 5000);
+INSERT INTO music_store VALUES (13, "piccolo", 7, "Tiny", 500);
+INSERT INTO music_store VALUES (14, "hurdy gurdy", 1, "Corelli", 1300);
+INSERT INTO music_store VALUES (15, "tambourine", 3, "Shaker", 100);
+
+--Display database ordered by price.
+SELECT * FROM music_store ORDER BY price;
+
+--Display total number of instrument inventory.
+SELECT SUM (quantity) FROM music_store;
+
+
