@@ -20,7 +20,9 @@ INSERT INTO music_store VALUES (15, "tambourine", 3, "Shaker", 100);
 --Display database ordered by price.
 SELECT * FROM music_store ORDER BY price;
 
---Display total number of instrument inventory.
+--What is the total number of instrument inventory?
 SELECT SUM (quantity) FROM music_store;
 
+--What is the most expensive item?
+SELECT MAX(price), item FROM music_store;
 
