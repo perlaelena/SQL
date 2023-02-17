@@ -1,0 +1,101 @@
+/* Create table about the people and what they do here */
+CREATE TABLE actors (actor_id INTEGER PRIMARY KEY, name TEXT, year_born INTEGER, state_born TEXT);
+INSERT INTO actors VALUES (1, "Lady Gaga", 1986, "New York");
+INSERT INTO actors VALUES (2, "Zac Efron", 1987, "California");
+INSERT INTO actors VALUES (3, "Robert Pattinson", 1986, "London");
+INSERT INTO actors VALUES (4, "Kristen Stewart", 1990, "California");
+INSERT INTO actors VALUES (5, "Vanessa Hudgens", 1988, "California");
+INSERT INTO actors VALUES (6, "Taylor Lautner", 1992, "Michigan");
+INSERT INTO actors VALUES (7, "Beanie Feldstein", 1993, "California");
+INSERT INTO actors VALUES (8, "Jonah Hill", 1983, "California");
+INSERT INTO actors VALUES (9, "Emma Stone", 1988, "Arizona");
+INSERT INTO actors VALUES (10, "Ryan Gosling", 1980, "Canada");
+INSERT INTO actors VALUES (11, "Rachel McAdams", 1978, "Canada");
+INSERT INTO actors VALUES (12, "Daniel Radcliffe", 1989, "London");
+INSERT INTO actors VALUES (13, "Rupert Grint", 1988, "United Kingdom");
+INSERT INTO actors VALUES (14, "Emma Watson", 1990, "France");
+INSERT INTO actors VALUES (15, "Anya Taylor-Joy", 1996, "Florida");
+
+--Display all information from "actors" table. 
+SELECT * FROM actors;
+
+--Create table with movies and release date.
+CREATE TABLE movies (movie_id INTEGER PRIMARY KEY, movie_title TEXT, year_released INTEGER);
+INSERT INTO movies VALUES (1, "Harry Potter and the sorcerer's stone", 2001);
+INSERT INTO movies VALUES (2, "A star is born", 2018);
+INSERT INTO movies VALUES (3, "La la land", 2016);
+INSERT INTO movies VALUES (4, "Booksmart", 2019);
+INSERT INTO movies VALUES (5, "superbad", 2007);
+INSERT INTO movies VALUES (6, "The notebook", 2004);
+INSERT INTO movies VALUES (7, "Glass", 2019);
+INSERT INTO movies VALUES (8, "High school musical", 2006);
+INSERT INTO movies VALUES (9, "Twilight", 2008);
+INSERT INTO movies VALUES (10, "Mean Girls", 2004);
+INSERT INTO movies VALUES (11, "The menu", 2022);
+INSERT INTO movies VALUES (12, "Emma", 2020);
+INSERT INTO movies VALUES (13, "Doctor Strange", 2016);
+INSERT INTO movies VALUES (14, "The greatest showman", 2017);
+INSERT INTO movies VALUES (15, "Game night", 2018);
+
+--Display all information from movies table.
+SELECT * FROM movies;
+
+--Create table linking the actor to the movies they have starred in.
+CREATE TABLE actor_movie (actor1 INTEGER, movie1 INTEGER);
+INSERT INTO actor_movie VALUES (2, 8);
+INSERT INTO actor_movie VALUES (3, 9);
+INSERT INTO actor_movie VALUES (4, 9);
+INSERT INTO actor_movie VALUES (5, 8);
+INSERT INTO actor_movie VALUES (6, 9);
+INSERT INTO actor_movie VALUES (7, 4);
+INSERT INTO actor_movie VALUES (8, 5);
+INSERT INTO actor_movie VALUES (9, 5);
+INSERT INTO actor_movie VALUES (9, 3);
+INSERT INTO actor_movie VALUES (10, 6);
+INSERT INTO actor_movie VALUES (10, 3);
+INSERT INTO actor_movie VALUES (11, 10);
+INSERT INTO actor_movie VALUES (11, 6);
+INSERT INTO actor_movie VALUES (11, 13);
+INSERT INTO actor_movie VALUES (12, 1);
+INSERT INTO actor_movie VALUES (13, 1);
+INSERT INTO actor_movie VALUES (14, 1);
+INSERT INTO actor_movie VALUES (15, 12);
+INSERT INTO actor_movie VALUES (15, 11);
+INSERT INTO actor_movie VALUES (15, 7);
+INSERT INTO actor_movie VALUES (2, 14);
+
+--Which actors were born in California ordered by youngest?
+SELECT name, state_born, year_born FROM actors WHERE state_born = "California" ORDER BY year_born;
+
+--Which actors were born in London or the United kingdom ordered by youngest?
+SELECT name, state_born, year_born FROM actors WHERE state_born = "London" OR state_born = "United Kingdom" ORDER BY year_born;
+
+--Calculate the age of the actor, order by age.
+SELECT name, 2022-year_born AS age FROM actors ORDER BY age;
+
+--Calculate the age of the youngest actor. 
+SELECT name, MIN(2022-year_born) AS youngest_age FROM actors;
+
+--Calculate the age of the oldest actor.
+SELECT name, MAX(2022-year_born) AS oldest_age FROM actors;
+
+--Calculate how many actors were born in each state, start with highest count.
+SELECT COUNT(state_born),
+state_born FROM actors GROUP BY state_born ORDER BY COUNT(state_born)DESC;
+
+--Create table linking which actors have kissed either in real life or in a movie. 
+CREATE TABLE kissed (id_1 INTEGER, id_2 INTEGER);
+INSERT INTO kissed VALUES (2, 5);
+INSERT INTO kissed VALUES (3, 4);
+INSERT INTO kissed VALUES (3, 6);
+INSERT INTO kissed VALUES (8, 9);
+INSERT INTO kissed VALUES (9, 10);
+INSERT INTO kissed VALUES (10, 11);
+INSERT INTO kissed VALUES (12, 14);
+INSERT INTO kissed VALUES (13, 14);
+
+--Show names of which actors have kissed.
+SELECT a.name, b.name FROM kissed JOIN actors a ON kissed.id_1 = a.actor_id JOIN actors b ON kissed.id_2 = b.actor_id;
+
+--Which movies has each actor starred in?
+SELECT name, movie_title FROM actor_movie JOIN actors ON actor_movie.actor1 = actors.actor_id JOIN MOVIES ON actor_movie.movie1 = movies.movie_id ORDER BY movie_title;
