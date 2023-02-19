@@ -40,6 +40,6 @@ SELECT COUNT(distinct customers.acctnum), AVG(quantity * price)
 FROM BIT_DB.FebSales
 LEFT INNER JOIN BIT_DB.Customers
 ON customers.order_id = FebSales.orderID
-WHERE quantity > 2 AND length(orderID) = 6 AND orderID <> 'Order ID';;
+WHERE quantity > 2 AND length(orderID) = 6 AND orderID <> 'Order ID';
 
 
