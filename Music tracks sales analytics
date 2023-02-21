@@ -1,0 +1,111 @@
+SELECT customerId, FirstName, LastName, Country
+FROM chinook.customers
+WHERE Country <> "US";
+
+SELECT customerId, FirstName, LastName, Country
+FROM chinook.customers
+WHERE Country = "Brazil";
+
+SELECT customers.FirstName, customers.LastName, invoices.InvoiceID, invoices.InvoiceDate, invoices.BillingCountry
+FROM chinook.customers
+LEFT OUTER JOIN chinook.invoices
+ON customers.CustomerId = invoices.CustomerId
+WHERE customers.Country = "Brazil";
+
+SELECT employees.FirstName, employees.LastName, Title
+FROM chinook.employees
+WHERE Title = "Sales Support Agent";
+
+SELECT DISTINCT BillingCountry
+FROM chinook.invoices;
+
+SELECT invoices.InvoiceId, employees.FirstName, employees.LastName
+FROM chinook.invoices
+JOIN chinook.customers
+ON invoices.customerId = customers.customerId
+INNER JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId;
+
+SELECT invoices.Total, customers.FirstName AS customer_firstName, customers.LastName AS customer_lastName, customers.Country, employees.FirstName AS employee_firstName, employees.LastName AS employee_lastName 
+FROM chinook.invoices
+LEFT OUTER JOIN chinook.customers
+ON invoices.customerId = customers.customerId
+LEFT OUTER JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId;
+
+SELECT COUNT(InvoiceId) AS invoices_2009
+FROM chinook.invoices
+WHERE InvoiceDate LIKE '%2009%';
+
+SELECT SUM(Total)
+FROM chinook.invoices
+WHERE InvoiceDate LIKE '%2009%';
+
+SELECT invoice_items.InvoiceLineId, tracks.Name
+FROM chinook.invoice_items
+LEFT OUTER JOIN chinook.tracks
+ON tracks.TrackId = invoice_items.TrackId;
+
+SELECT invoice_items.InvoiceLineId, tracks.Name AS track_name, artists.Name AS artist_name
+FROM chinook.invoice_items
+JOIN chinook.tracks
+ON invoice_items.TrackId = tracks.TrackId
+JOIN chinook.albums
+ON albums.AlbumId = tracks.AlbumId
+JOIN chinook.artists
+ON albums.ArtistId = artists.ArtistId
+ORDER BY InvoiceLineId;
+
+SELECT tracks.Name as track_name, albums.Title as album_title, media_types.Name as media_type, genres.Name as genre_name
+FROM chinook.tracks
+JOIN chinook.media_types
+ON tracks.MediaTypeId = media_types.MediaTypeId
+JOIN chinook.genres
+ON Genres.GenreId = tracks.GenreId
+JOIN chinook.albums
+ON albums.AlbumId = tracks.Albumid
+JOIN chinook.artists
+ON albums.ArtistId = artists.ArtistId;
+
+SELECT distinct employees.EmployeeId, employees.FirstName, employees.LastName, SUM(invoices.Total) 
+OVER (PARTITION BY employees.EmployeeId) as "total_sales"
+FROM chinook.invoices
+JOIN chinook.customers
+ON invoices.customerId = customers.customerId
+JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId
+WHERE Title = "Sales Support Agent";
+
+SELECT distinct employees.EmployeeId, employees.FirstName, employees.LastName, SUM(invoices.Total) 
+OVER (PARTITION BY employees.EmployeeId) as "total_sales"
+FROM chinook.invoices
+JOIN chinook.customers
+ON invoices.customerId = customers.customerId
+JOIN chinook.employees
+ON customers.SupportRepId = employees.EmployeeId
+WHERE Title = "Sales Support Agent" AND invoices.InvoiceDate LIKE '%2009%'
+ORDER BY SUM(invoices.Total) 
+OVER (PARTITION BY employees.EmployeeId) desc
+LIMIT 1;
+
+#How many of tracks are in each playlist?
+SELECT playlists.Name, COUNT(playlist_track.TrackId) 
+FROM Chinook.playlist_track
+JOIN chinook.playlists
+ON playlist_track.PlaylistId = playlists.PlaylistId
+GROUP BY playlists.Name
+ORDER BY Name;
+
+#What is the popularity of each playlist?
+SELECT playlists.Name, COUNT(playlist_track.TrackId),
+CASE
+    WHEN COUNT(playlist_track.TrackId) >2000 THEN "very popular"
+    WHEN COUNT(playlist_track.TrackId) >1000 THEN "popular"
+    WHEN COUNT(playlist_track.TrackId) >400 THEN "somewhat popular"
+    ELSE "not popular"
+END AS "Popularity"
+FROM Chinook.playlist_track
+JOIN chinook.playlists
+ON playlist_track.PlaylistId = playlists.PlaylistId
+GROUP BY playlists.Name
+ORDER BY COUNT(playlist_track.TrackId) DESC;
